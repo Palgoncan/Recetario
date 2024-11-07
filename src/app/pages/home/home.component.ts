@@ -47,7 +47,6 @@ export class HomeComponent {
           { ...state, loading: false, error: false, 
             data: data.map((m:any)=>(type == 'category' ? ({name:m.strCategory}) : ({name:m.strArea})))}
         ))
-        console.log(data)
       },
       (err) => {
         console.log(err)
