@@ -1,12 +1,32 @@
-import { Component } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { JsonPipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [JsonPipe],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
+  auth = inject(AuthService);
+  router = inject(Router);
+ 
 
+  constructor(){
+    effect(()=>{
+      if(this.auth.$isLogged()){
+        this.router.navigate(['/home']);
+      }
+    })
+  }
+
+  login(){
+    if(this.auth.$isLogged())
+      return;
+
+    this.auth.login();
+  }
 }

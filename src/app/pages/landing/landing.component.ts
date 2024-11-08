@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-landing',
@@ -8,5 +10,16 @@ import { Component } from '@angular/core';
   styleUrl: './landing.component.css'
 })
 export class LandingComponent {
-
+  auth = inject(AuthService);
+  router = inject(Router);
+  constructor() {
+    effect(() => {
+      console.log("EFECTO"+this.auth.$isLogged());
+      if (this.auth.$isLogged()) {
+        this.router.navigate(['home']);
+      } else {
+        this.router.navigate(['login']);
+      }
+    })
+  }
 }
