@@ -50,7 +50,7 @@ export class ListRecipesComponent {
         resquest = this.api.getRecipesByNationality(this.subtype);
         break;
       case undefined:
-        this.fire.getRecipes();
+        resquest = this.fire.getRecipes();
         break;
       default:
         console.log('Fetching favorites');
@@ -59,14 +59,14 @@ export class ListRecipesComponent {
     }
 
     if(resquest){
-      resquest.subscribe({
-        next: (data) =>{
+      (resquest as any).subscribe({
+        next: (data:any) =>{
           this.$state.update(state=> (
             { ...state, loading:false, error:false, data:data}
           ))
         },
 
-        error: (err) => {
+        error: (err:any) => {
           this.$state.update(state=> (
             { ...state, loading:false, error:err, data:[]}
           ))

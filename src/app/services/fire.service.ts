@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, DocumentReference } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Recipe } from '../model/recipe';
 
@@ -17,6 +17,7 @@ export class FireService {
 
 
   constructor() {
+    //console.log(`users/${this.auth.userData.uid}/recipes`)
      this.itemCollection = this.firestore.collection(`users/${this.auth.userData.uid}/recipes`);
      this.items$ = this.itemCollection.valueChanges();
    }
@@ -34,4 +35,18 @@ export class FireService {
    getRecipes():Observable<Recipe[]> {
       return this.items$;
    }
+
+   getRecipesWithID() {
+    return this.itemCollection.snapshotChanges().pipe(
+      map((actions: any) => {
+        return {
+          meals: actions.map((a: any) => {
+            const data = a.payload.doc.data() as Recipe;
+            const idMeal = a.payload.doc.id; // Obtener el ID del documento
+            return { idMeal:idMeal, ...data }; // Devolver el ID junto con los datos
+          })
+        };
+      })
+    );
+  }
 }
