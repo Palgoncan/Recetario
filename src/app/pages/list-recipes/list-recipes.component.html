@@ -32,5 +32,13 @@
         </li>
         }
     </ul>
+    <div class="fixed bottom-5 left-1/2 transform-translate-x-1/2">
+        <button (click)="openModal()" class="flex items-center justify-center w-16 h-16
+     bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition
+     duration-200">
+            <span class="text-4xl leading-none">+</span>
+        </button>
+    </div>
 </div>
+<app-form-modal [isOpen]="isModalOpen" (onClose)="closeModal($event)"></app-form-modal>
 }
