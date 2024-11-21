@@ -14,35 +14,36 @@ import { FormModalComponent } from '../../modal/form-modal/form-modal.component'
   styleUrl: './list-recipes.component.css'
 })
 export class ListRecipesComponent {
-  api=inject (ApiService);
+  api = inject(ApiService);
   router = inject(Router);
   fire = inject(FireService);
 
   @Input()
-  type:string='';
+  type: string = '';
 
   @Input()
-  subtype:string='';
+  subtype: string = '';
 
-  isModalOpen:boolean=false;
+  isModalOpen: boolean = false;
 
-  $state:WritableSignal<any> = signal({
-    loading:false,
-    error:false,
-    data:[]
-  })
+  $state: WritableSignal<any> = signal({
+    loading: false,
+    error: false,
+    data: []
+  });
 
-  ngOnInit(){
+  ngOnInit() {
     this.fetchData();
   }
 
-  fetchData(){
-    this.$state.update(state =>(
-       { ...state, loading: true}
-    ));
+  fetchData() {
+    this.$state.update(state => ({
+      ...state,
+      loading: true
+    }));
 
     let resquest;
-    switch(this.type){
+    switch (this.type) {
       case 'category':
         resquest = this.api.getRecipesByCategory(this.subtype);
         break;
@@ -50,50 +51,72 @@ export class ListRecipesComponent {
         resquest = this.api.getRecipesByNationality(this.subtype);
         break;
       case undefined:
-        resquest = this.fire.getRecipes();
+        resquest = this.fire.getRecipesWithID();
         break;
       default:
         console.log('Fetching favorites');
-          resquest=null;
-
+        resquest = null;
     }
 
-    if(resquest){
+    if (resquest) {
       (resquest as any).subscribe({
-        next: (data:any) =>{
-          this.$state.update(state=> (
-            { ...state, loading:false, error:false, data:data}
-          ))
+        next: (data: any) => {
+          data.reduce((acc: any, item: any) => {
+            const { id, ...recipeData } = item;
+            acc[id] = recipeData;
+            return acc;
+          }, {});
+
+          this.$state.update(state => ({
+            ...state,
+            loading: false,
+            error: false,
+            data: data
+          }));
         },
-
-        error: (err:any) => {
-          this.$state.update(state=> (
-            { ...state, loading:false, error:err, data:[]}
-          ))
+        error: (err: any) => {
+          this.$state.update(state => ({
+            ...state,
+            loading: false,
+            error: err,
+            data: []
+          }));
         }
-      })
-
-    }
-    else{
-      this.$state.update(state=> (
-        { ...state, loading:false, error:false, data:[]}
-      ))
-
+      });
+    } else {
+      this.$state.update(state => ({
+        ...state,
+        loading: false,
+        error: false,
+        data: []
+      }));
     }
   }
-  goToRecipe(idMeal:string){
-      this.router.navigate(['recipe', idMeal]);
+
+  goToRecipe(idMeal: string) {
+    this.router.navigate(['recipe', idMeal]);
   }
 
-   openModal(){
-    this.isModalOpen=true;
-    history.pushState({},document.title)
-   }
+  openModal() {
+    this.isModalOpen = true;
+    history.pushState({}, document.title);
+  }
 
-   closeModal($event?:any){
-    if($event){
-      console.log("Desde el componente que abre el modal"+$event);
+  closeModal($event?: any) {
+    if ($event) {
+      console.log("Desde el componente que abre el modal" + $event);
     }
-    this.isModalOpen=false;
-   }
+    this.isModalOpen = false;
+  }
+
+  async deleteRecipe(idMeal: string) {
+    if (confirm('¿Estás seguro de que deseas eliminar esta receta?')) {
+      try {
+        await this.fire.deleteRecipe(idMeal);
+        this.fetchData(); // Actualizar la lista después de eliminar
+      } catch (error) {
+        console.error('Error al eliminar la receta:', error);
+      }
+    }
+  }
 }

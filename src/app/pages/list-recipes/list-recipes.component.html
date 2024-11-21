@@ -3,8 +3,7 @@
     <h1 class="text-2xl font-bold mb-4">Lista de Recetas</h1>
     <ul class="space-y-4">
         @for(i of [1,2,3,4,5,6,7,8,9,10]; track i){
-        <li class="flex items-center p-4 border rounded-lg shadow
-    animate-pulse">
+        <li class="flex items-center p-4 border rounded-lg shadow animate-pulse">
             <div class="h-16 w-16 bg-gray-300 rounded-md mr-4"></div>
             <div>
                 <div class="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
@@ -22,13 +21,24 @@
     <h1 class="text-2xl font-bold mb-4">Lista de Recetas</h1>
     <ul class="space-y-4">
         @for(recipe of $state().data; track recipe.idMeal){
-        <li class="flex items-center p-4 border rounded-lg shadow hover:bg-gray-100
-    transition cursor-pointer" (click)="goToRecipe(recipe.idMeal)">
-            <img [src]="recipe.strMealThumb" alt="{{ recipe.strMeal }}" class="h-16 w-16
-    rounded-md mr-4">
-            <div>
-                <h2 class="text-lg font-semibold">{{ recipe.strMeal }}</h2>
+        <li
+            class="flex items-center justify-between p-4 border rounded-lg shadow hover:bg-gray-100 transition cursor-pointer">
+            <div class="flex items-center" (click)="goToRecipe(recipe.idMeal)">
+                <img [src]="recipe.strMealThumb" alt="{{ recipe.strMeal }}" class="h-16 w-16 rounded-md mr-4">
+                <div>
+                    <h2 class="text-lg font-semibold">{{ recipe.strMeal }}</h2>
+                </div>
             </div>
+            @if(type==undefined){
+            <button (click)="deleteRecipe(recipe.idMeal); $event.stopPropagation()"
+                class="text-red-600 hover:text-red-800 ml-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+            </button>
+            }
         </li>
         }
     </ul>
@@ -43,5 +53,4 @@
 </div>
 <app-form-modal [isOpen]="isModalOpen" (onClose)="closeModal($event)"></app-form-modal>
 }
-
 }
