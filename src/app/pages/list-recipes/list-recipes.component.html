@@ -23,13 +23,22 @@
         @for(recipe of $state().data; track recipe.idMeal){
         <li
             class="flex items-center justify-between p-4 border rounded-lg shadow hover:bg-gray-100 transition cursor-pointer">
+            @if (type=="category" || type=="nationality") {
             <div class="flex items-center" (click)="goToRecipe(recipe.idMeal)">
                 <img [src]="recipe.strMealThumb" alt="{{ recipe.strMeal }}" class="h-16 w-16 rounded-md mr-4">
                 <div>
                     <h2 class="text-lg font-semibold">{{ recipe.strMeal }}</h2>
                 </div>
             </div>
+            }
+
             @if(type==undefined){
+            <div class="flex items-center" (click)="goToRecipe(recipe.idMeal)">
+                <img [src]="recipe.strMealThumb" alt="{{ recipe.strMeal }}" class="h-16 w-16 rounded-md mr-4">
+                <div>
+                    <h2 class="text-lg font-semibold">{{ recipe.strMeal }}</h2>
+                </div>
+            </div>
             <button (click)="deleteRecipe(recipe.idMeal); $event.stopPropagation()"
                 class="text-red-600 hover:text-red-800 ml-4">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"

@@ -94,8 +94,12 @@ export class ListRecipesComponent {
   }
 
   goToRecipe(idMeal: string) {
+  if (this.type === undefined) {
+    this.router.navigate(['recipe/favorites', idMeal]);
+  } else {
     this.router.navigate(['recipe', idMeal]);
   }
+}
 
   openModal() {
     this.isModalOpen = true;
@@ -113,7 +117,7 @@ export class ListRecipesComponent {
     if (confirm('¿Estás seguro de que deseas eliminar esta receta?')) {
       try {
         await this.fire.deleteRecipe(idMeal);
-        this.fetchData(); // Actualizar la lista después de eliminar
+        this.fetchData();
       } catch (error) {
         console.error('Error al eliminar la receta:', error);
       }

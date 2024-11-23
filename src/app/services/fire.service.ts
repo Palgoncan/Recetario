@@ -14,8 +14,10 @@ export class FireService {
   auth = inject(AuthService);
 
   constructor() {
-    this.itemCollection = this.firestore.collection(`users/${this.auth.userData.uid}/recipes`);
-    this.items$ = this.itemCollection.valueChanges();
+    const path = `users/${this.auth.userData.uid}/recipes`;
+    console.log('Ruta de la colección:', path);
+    this.itemCollection = this.firestore.collection(path);
+    this.items$ = this.itemCollection.valueChanges({ idField: 'id' });
   }
 
   createRecipe(recipe: Recipe): Promise<DocumentReference<any>> {
@@ -27,6 +29,7 @@ export class FireService {
   }
 
   getRecipesById(id: string): Observable<Recipe> {
+    console.log('Fetching recipe with ID:', id);
     return this.itemCollection.doc(id).valueChanges();
   }
 
