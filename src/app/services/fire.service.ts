@@ -29,7 +29,6 @@ export class FireService {
   }
 
   getRecipesById(id: string): Observable<Recipe> {
-    console.log('Fetching recipe with ID:', id);
     return this.itemCollection.doc(id).valueChanges();
   }
 
@@ -45,10 +44,6 @@ export class FireService {
         return { idMeal: idMeal, ...data };
       }))
     );
-  }
-
-  editRecipe(id: string | undefined = undefined, updatedRecipe: Partial<Recipe>): Promise<void> {
-    return this.itemCollection.doc(id).update(updatedRecipe);
   }
 
   updateRecipe(id: string, recipe: Recipe): Promise<void> {
