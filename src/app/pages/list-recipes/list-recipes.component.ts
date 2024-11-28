@@ -5,6 +5,7 @@ import { NgClass } from '@angular/common';
 import { Recipe } from '../../model/recipe';
 import { FireService } from '../../services/fire.service';
 import { FormModalComponent } from '../../modal/form-modal/form-modal.component';
+import { EditRecipeComponent } from '../edit-recipe/edit-recipe.component';
 
 @Component({
   selector: 'app-list-recipes',
@@ -17,6 +18,8 @@ export class ListRecipesComponent {
   api = inject(ApiService);
   router = inject(Router);
   fire = inject(FireService);
+  selectedRecipeId: string | null = null;
+  isEditModalOpen = false;
 
   @Input()
   type: string = '';
@@ -123,4 +126,9 @@ export class ListRecipesComponent {
       }
     }
   }
+
+  editRecipe(idMeal: string): void {
+    this.router.navigate([`/favorites/edit/${idMeal}`]);
+  }
+
 }

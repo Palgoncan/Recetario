@@ -4,7 +4,7 @@ import { FireService } from '../../services/fire.service';
 @Component({
   selector: 'app-view-favorite',
   standalone: true,
-  imports: [JsonPipe, CommonModule],
+  imports: [CommonModule],
   templateUrl: './view-favorite.component.html',
   styleUrl: './view-favorite.component.css'
 })

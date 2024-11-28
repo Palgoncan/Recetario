@@ -4,7 +4,7 @@ import { CommonModule, JsonPipe } from '@angular/common';
 @Component({
   selector: 'app-view-recipe',
   standalone: true,
-  imports: [JsonPipe, CommonModule],
+  imports: [CommonModule],
   templateUrl: './view-recipe.component.html',
   styleUrl: './view-recipe.component.css'
 })

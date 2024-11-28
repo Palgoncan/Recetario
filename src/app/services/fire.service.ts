@@ -46,4 +46,26 @@ export class FireService {
       }))
     );
   }
+
+  editRecipe(id: string | undefined = undefined, updatedRecipe: Partial<Recipe>): Promise<void> {
+    return this.itemCollection.doc(id).update(updatedRecipe);
+  }
+
+  updateRecipe(id: string, recipe: Recipe): Promise<void> {
+    return this.itemCollection.doc(id).update(recipe);
+  }
+
+  getRecipeById(id: string): Observable<Recipe> {
+    return this.itemCollection
+      .doc<Recipe>(id)
+      .valueChanges()
+      .pipe(
+        map((recipe) => {
+          if (recipe) {
+            return { idMeal: id, ...recipe };
+          }
+          throw new Error('Recipe not found');
+        })
+      );
+  }
 }
